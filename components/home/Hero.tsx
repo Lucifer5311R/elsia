@@ -56,8 +56,27 @@ export default function Hero() {
 
                             <div className="w-full h-full bg-slate-200 overflow-hidden rounded border border-gray-300 relative group">
                                 <div className="absolute inset-0 flex items-center justify-center text-muted-foreground bg-gray-50">
-                                    <span className="font-caveat text-xl">Hero Image Collage Placeholder</span>
+                                    {/* Video or Image Fallback */}
+                                    <video
+                                        className="w-full h-full object-cover"
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        poster="/hero-poster.jpg"
+                                    >
+                                        <source src="/hero-video.mp4" type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </video>
                                 </div>
+                                {/* Play button overlay (optional if autoplay) */}
+                                {/* 
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/10">
+                                    <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg border-2 border-white cursor-pointer hover:scale-110 transition-transform">
+                                        <Play className="w-6 h-6 text-white ml-1" fill="currentColor" />
+                                    </div>
+                                </div>
+                                */}
                                 {/* Play button overlay */}
                                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/10">
                                     <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg border-2 border-white cursor-pointer hover:scale-110 transition-transform">

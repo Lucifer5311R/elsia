@@ -1,34 +1,37 @@
 import Container from "../Container";
-import { Plus } from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import ProductCard from "@/components/ProductCard";
 
-const products = [
-    {
-        name: "Frames",
-        category: "Home Decor",
-        price: "Rs. 499",
-        image: "/placeholder-frames.jpg",
-    },
-    {
-        name: "Mini Frames",
-        category: "Gifts",
-        price: "Rs. 299",
-        image: "/placeholder-mini-frames.jpg",
-    },
-    {
-        name: "Doll",
-        category: "Toys",
-        price: "Rs. 899",
-        image: "/placeholder-doll.jpg",
-    },
-    {
-        name: "Key Chains",
-        category: "Accessories",
-        price: "Rs. 149",
-        image: "/placeholder-keychains.jpg",
-    },
-];
+export default async function FreshFromSketchpad() {
+    const { data: products } = await supabase
+        .from('products')
+        .select(`
+          *,
+          categories (
+            name
+          )
+        `)
+        .eq('is_featured', true)
+        .limit(4)
+        .order('created_at', { ascending: false });
 
-export default function FreshFromSketchpad() {
+    // Fallback if no featured products, just get latest 4
+    let displayProducts = products;
+    if (!products || products.length === 0) {
+        const { data: latestProducts } = await supabase
+            .from('products')
+            .select(`
+              *,
+              categories (
+                name
+              )
+            `)
+            .limit(4)
+            .order('created_at', { ascending: false });
+
+        displayProducts = latestProducts;
+    }
+
     return (
         <section className="py-20 bg-orange-50/30 relative">
             {/* Decorative wavy top */}
@@ -50,33 +53,24 @@ export default function FreshFromSketchpad() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {products.map((product) => (
-                        <div key={product.name} className="bg-white rounded-xl p-4 shadow-sm group hover:shadow-md transition border border-transparent hover:border-sketch-outline">
-                            <div className="aspect-square bg-slate-100 rounded-lg mb-4 overflow-hidden relative">
-                                <div className="absolute inset-0 flex items-center justify-center text-muted-foreground/30 font-caveat text-xl">
-                                    {product.name}
-                                </div>
-                                <button className="absolute bottom-3 right-3 w-8 h-8 bg-white rounded-full shadow flex items-center justify-center text-primary border border-gray-100 hover:scale-110 transition">
-                                    <Plus className="w-5 h-5" />
-                                </button>
-                                {product.name === "Doll" && (
-                                    <span className="absolute top-2 left-2 bg-primary text-white text-[10px] px-2 py-0.5 font-bold uppercase tracking-wider rounded-sm">
-                                        Sale
-                                    </span>
-                                )}
-                            </div>
-
-                            <div>
-                                <h3 className="font-bold text-lg leading-tight">{product.name}</h3>
-                                <div className="flex justify-between items-center mt-1">
-                                    <p className="text-muted-foreground text-sm">{product.category}</p>
-                                    <p className="font-bold text-primary font-caveat text-lg">{product.price}</p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                {(!displayProducts || displayProducts.length === 0) ? (
+                    <div className="text-center py-10">
+                        <p className="text-muted-foreground font-caveat text-xl">
+                            Loading fresh designs... or maybe we're just drawing them!
+                        </p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {displayProducts.map((product: any) => (
+                            <ProductCard
+                                key={product.id}
+                                product={product}
+                                // @ts-ignore
+                                categoryName={product.categories?.name}
+                            />
+                        ))}
+                    </div>
+                )}
             </Container>
 
             {/* Decorative wavy bottom */}
@@ -88,3 +82,4 @@ export default function FreshFromSketchpad() {
         </section>
     );
 }
+

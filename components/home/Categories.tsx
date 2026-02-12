@@ -1,23 +1,15 @@
 import Container from "../Container";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 
-const categories = [
-    {
-        title: "Hamper",
-        image: "/placeholder-hamper.jpg",
-    },
-    {
-        title: "Bouquet",
-        image: "/placeholder-bouquet.jpg",
-    },
-    {
-        title: "Polaroids",
-        image: "/placeholder-polaroids.jpg",
-    },
-];
+export default async function Categories() {
+    const { data: categories } = await supabase
+        .from('categories')
+        .select('*')
+        .order('id', { ascending: true })
+        .limit(3);
 
-export default function Categories() {
     return (
         <section className="py-16 bg-background relative">
             {/* Decorative wavy line separator */}
@@ -45,24 +37,36 @@ export default function Categories() {
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8">
-                    {categories.map((cat, idx) => (
+                    {(categories || []).map((cat: any, idx: number) => (
                         <div
-                            key={cat.title}
+                            key={cat.id}
                             className={`group relative aspect-square bg-white rounded-lg border-2 border-sketch-outline p-3 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-1 transition-all ${idx % 2 === 0 ? 'rotate-1' : '-rotate-1'} hover:rotate-0`}
                         >
-                            <div className="w-full h-full bg-slate-100 overflow-hidden rounded relative">
-                                {/* Placeholder Content */}
-                                <div className="absolute inset-0 flex items-center justify-center text-muted-foreground/30 text-4xl font-caveat">
-                                    {cat.title} Image
+                            <Link href={`/shop?category=${cat.slug}`} className="block w-full h-full">
+                                <div className="w-full h-full bg-slate-100 overflow-hidden rounded relative">
+                                    {/* Placeholder Content */}
+                                    {cat.image_url ? (
+                                        <img src={cat.image_url} alt={cat.name} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <div className="absolute inset-0 flex items-center justify-center text-muted-foreground/30 text-4xl font-caveat">
+                                            {cat.name} Image
+                                        </div>
+                                    )}
+                                    <div className="absolute bottom-4 left-4 bg-white border-2 border-sketch-outline px-4 py-1 text-lg font-bold font-caveat shadow-[2px_2px_0px_rgba(0,0,0,1)] transform -rotate-2 group-hover:rotate-0 transition-transform">
+                                        {cat.name}
+                                    </div>
                                 </div>
-                                <div className="absolute bottom-4 left-4 bg-white border-2 border-sketch-outline px-4 py-1 text-lg font-bold font-caveat shadow-[2px_2px_0px_rgba(0,0,0,1)] transform -rotate-2 group-hover:rotate-0 transition-transform">
-                                    {cat.title}
-                                </div>
-                            </div>
+                            </Link>
                         </div>
                     ))}
+                    {!categories?.length && (
+                        <div className="col-span-3 text-center py-10 text-muted-foreground font-caveat text-xl">
+                            Loading collections...
+                        </div>
+                    )}
                 </div>
             </Container>
         </section>
     );
 }
+

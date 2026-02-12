@@ -21,7 +21,7 @@ export default function CartPage() {
 
     const handleCheckout = () => {
         // WhatsApp Checkout Logic
-        const phoneNumber = "919876543210"; // Replace with actual business number
+        const phoneNumber = "7510336340"; // Replace with actual business number
         const message = `Hello Elysia, I would like to place an order:%0A%0A${items.map(item => `- ${item.products.name} (x${item.quantity}): Rs. ${item.products.price * item.quantity}`).join('%0A')}%0A%0A*Total Order Value: Rs. ${total}*%0A%0APlease confirm my order!`;
 
         window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');

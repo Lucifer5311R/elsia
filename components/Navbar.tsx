@@ -95,33 +95,57 @@ export default function Navbar() {
                     {/* Mobile Menu Overlay */}
                     {/* Mobile Menu Overlay */}
                     {isMenuOpen && (
-                        <div className="fixed inset-0 bg-white z-[60] flex flex-col animate-in slide-in-from-right duration-300">
+                        <div className="fixed inset-0 bg-white/80 backdrop-blur-xl z-[60] flex flex-col animate-in slide-in-from-right duration-500 supports-[backdrop-filter]:bg-white/60">
                             <div className="flex justify-end p-6">
-                                <button onClick={toggleMenu} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
+                                <button
+                                    onClick={toggleMenu}
+                                    className="p-3 bg-white/50 backdrop-blur-sm rounded-full hover:bg-white shadow-sm transition-all active:scale-95 border border-white/20"
+                                >
                                     <X className="w-8 h-8 text-slate-800" />
                                 </button>
                             </div>
                             <div className="flex flex-col items-center justify-center flex-1 gap-8 pb-20">
-                                <Link href="/" onClick={toggleMenu} className="text-4xl font-caveat font-bold text-primary mb-8">
+                                <Link
+                                    href="/"
+                                    onClick={toggleMenu}
+                                    className="text-5xl font-caveat font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600 mb-8 drop-shadow-sm"
+                                >
                                     ELYSIA
                                 </Link>
-                                <Link href="/shop" onClick={toggleMenu} className="text-2xl font-medium tracking-wide hover:text-primary transition-colors">
-                                    Shop
-                                </Link>
-                                <Link href="/about" onClick={toggleMenu} className="text-2xl font-medium tracking-wide hover:text-primary transition-colors">
-                                    About
-                                </Link>
-                                <Link href="/journal" onClick={toggleMenu} className="text-2xl font-medium tracking-wide hover:text-primary transition-colors">
-                                    Journal
-                                </Link>
-                                <div className="w-12 h-1 bg-slate-100 rounded-full my-4"></div>
+
+                                <nav className="flex flex-col items-center gap-6 w-full">
+                                    {['Shop', 'About', 'Journal'].map((item, i) => (
+                                        <Link
+                                            key={item}
+                                            href={`/${item.toLowerCase()}`}
+                                            onClick={toggleMenu}
+                                            className="text-3xl font-caveat font-bold text-slate-800 hover:text-primary transition-colors hover:scale-105 active:scale-95 duration-300"
+                                            style={{ animationDelay: `${i * 100}ms` }}
+                                        >
+                                            {item}
+                                        </Link>
+                                    ))}
+                                </nav>
+
+                                <div className="w-24 h-1 bg-gradient-to-r from-transparent via-slate-300 to-transparent rounded-full my-6"></div>
+
                                 {user ? (
-                                    <Link href="/profile" onClick={toggleMenu} className="flex items-center gap-3 text-xl font-medium tracking-wide text-primary">
-                                        <User className="w-6 h-6" /> My Profile
+                                    <Link
+                                        href="/profile"
+                                        onClick={toggleMenu}
+                                        className="flex items-center gap-3 text-xl font-medium tracking-wide text-primary bg-white/50 px-6 py-3 rounded-full backdrop-blur-sm shadow-sm border border-white/40 hover:bg-white hover:shadow-md transition-all active:scale-95"
+                                    >
+                                        <User className="w-6 h-6" />
+                                        <span>My Profile</span>
                                     </Link>
                                 ) : (
-                                    <Link href="/login" onClick={toggleMenu} className="flex items-center gap-3 text-xl font-medium tracking-wide">
-                                        <User className="w-6 h-6" /> Log In
+                                    <Link
+                                        href="/login"
+                                        onClick={toggleMenu}
+                                        className="flex items-center gap-3 text-xl font-medium tracking-wide text-slate-700 bg-white/50 px-6 py-3 rounded-full backdrop-blur-sm shadow-sm border border-white/40 hover:bg-white hover:shadow-md transition-all active:scale-95"
+                                    >
+                                        <User className="w-6 h-6" />
+                                        <span>Log In</span>
                                     </Link>
                                 )}
                             </div>

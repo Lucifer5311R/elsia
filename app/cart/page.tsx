@@ -10,6 +10,7 @@ import { supabase } from "@/lib/supabase";
 export default function CartPage() {
     const { items, isLoading, removeFromCart, updateQuantity } = useCart();
     const [user, setUser] = useState<any>(null);
+    const [creatingOrder, setCreatingOrder] = useState(false);
 
     useEffect(() => {
         supabase.auth.getUser().then(({ data: { user } }: any) => setUser(user));
@@ -19,12 +20,90 @@ export default function CartPage() {
     const shipping = 0; // Free shipping logic can vary
     const total = subtotal + shipping;
 
-    const handleCheckout = () => {
-        // WhatsApp Checkout Logic
-        const phoneNumber = "7510336340"; // Replace with actual business number
-        const message = `Hello Elysia, I would like to place an order:%0A%0A${items.map(item => `- ${item.products.name} (x${item.quantity}): Rs. ${item.products.price * item.quantity}`).join('%0A')}%0A%0A*Total Order Value: Rs. ${total}*%0A%0APlease confirm my order!`;
+    const handleCheckout = async () => {
+        setCreatingOrder(true);
+        try {
+            // 1. Create Order
+            const { data: orderData, error: orderError } = await (supabase
+                .from('orders') as any) // Type casting due to strict types
+                .insert({
+                    user_id: user.id,
+                    total_amount: total,
+                    status: 'pending'
+                })
+                .select()
+                .single();
 
-        window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+            if (orderError) throw orderError;
+
+            // 2. Create Order Items
+            const orderItems = items.map(item => ({
+                order_id: orderData.id,
+                product_id: item.product_id,
+                quantity: item.quantity,
+                price_at_time: item.products.price
+            }));
+
+            const { error: itemsError } = await (supabase
+                .from('order_items') as any) // Type casting
+                .insert(orderItems);
+
+            if (itemsError) throw itemsError;
+
+            // 3. Clear Cart
+            // Faster to delete by user_id
+            await (supabase
+                .from('cart_items') as any)
+                .delete()
+                .eq('user_id', user.id);
+
+            // Force fetch to update UI immediately
+            await Promise.all(items.map(async (item) => {
+                // Context will auto-update if we trigger fetch, but manual clear is safer for UI
+                removeFromCart(item.id);
+            }));
+
+
+            // 4. Redirect to WhatsApp with formatted message
+            const phoneNumber = "7510336340";
+
+            // Fetch profile for formatted message
+            const { data: profile } = await (supabase
+                .from('profiles') as any)
+                .select('full_name, address_line1, city, pincode, phone')
+                .eq('id', user.id)
+                .single();
+
+            const customerName = profile?.full_name || user.user_metadata?.full_name || 'Valued Customer';
+            const address = profile?.address_line1 ? `\n*Shipping Address:*\n${profile.address_line1}, ${profile.city || ''} - ${profile.pincode || ''}` : '';
+            const customerPhone = profile?.phone || '';
+
+            let message = `*New Order #${orderData.id}*\n`;
+            message += `--------------------------------\n`;
+            message += `*Customer:* ${customerName}\n`;
+            if (customerPhone) message += `*Phone:* ${customerPhone}\n`;
+            if (address) message += `${address}\n`;
+            message += `--------------------------------\n`;
+            message += `*Items:*\n`;
+
+            items.forEach(item => {
+                message += `• ${item.products.name} (x${item.quantity}) - Rs. ${item.products.price * item.quantity}\n`;
+            });
+
+            message += `--------------------------------\n`;
+            message += `*TOTAL PAYABLE: Rs. ${total}*\n`;
+            message += `--------------------------------\n`;
+            message += `\nI would like to confirm this order. Please send me payment details.`;
+
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+
+        } catch (error: any) {
+            console.error('Checkout error:', error);
+            alert('Something went wrong creating your order. Please try again.');
+        } finally {
+            setCreatingOrder(false);
+        }
     };
 
     if (isLoading) {
@@ -128,10 +207,15 @@ export default function CartPage() {
                                 </div>
                                 <button
                                     onClick={handleCheckout}
-                                    className="w-full bg-[#25D366] text-white font-bold py-3 rounded-xl shadow-lg shadow-green-500/20 hover:shadow-xl hover:scale-[1.02] transition active:scale-[0.98] font-caveat text-xl tracking-wide flex items-center justify-center gap-2"
+                                    disabled={creatingOrder}
+                                    className="w-full bg-[#25D366] text-white font-bold py-3 rounded-xl shadow-lg shadow-green-500/20 hover:shadow-xl hover:scale-[1.02] transition active:scale-[0.98] font-caveat text-xl tracking-wide flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                                 >
-                                    <span>Checkout on WhatsApp</span>
-                                    <ArrowRight className="w-5 h-5" />
+                                    {creatingOrder ? 'Processing...' : (
+                                        <>
+                                            <span>Checkout on WhatsApp</span>
+                                            <ArrowRight className="w-5 h-5" />
+                                        </>
+                                    )}
                                 </button>
                                 <p className="text-xs text-center text-slate-400 mt-3">
                                     You'll be redirected to WhatsApp to confirm your order details securely.

@@ -125,6 +125,93 @@ export interface Database {
                     created_at?: string
                 }
             }
+            profiles: {
+                Row: {
+                    id: string
+                    full_name: string | null
+                    avatar_url: string | null
+                    phone: string | null
+                    address_line1: string | null
+                    address_line2: string | null
+                    city: string | null
+                    state: string | null
+                    pincode: string | null
+                    updated_at: string
+                }
+                Insert: {
+                    id: string
+                    full_name?: string | null
+                    avatar_url?: string | null
+                    phone?: string | null
+                    address_line1?: string | null
+                    address_line2?: string | null
+                    city?: string | null
+                    state?: string | null
+                    pincode?: string | null
+                    updated_at?: string
+                }
+                Update: {
+                    id?: string
+                    full_name?: string | null
+                    avatar_url?: string | null
+                    phone?: string | null
+                    address_line1?: string | null
+                    address_line2?: string | null
+                    city?: string | null
+                    state?: string | null
+                    pincode?: string | null
+                    updated_at?: string
+                }
+            }
+            orders: {
+                Row: {
+                    id: number
+                    user_id: string
+                    total_amount: number
+                    status: string
+                    created_at: string
+                }
+                Insert: {
+                    id?: number
+                    user_id: string
+                    total_amount: number
+                    status?: string
+                    created_at?: string
+                }
+                Update: {
+                    id?: number
+                    user_id?: string
+                    total_amount?: number
+                    status?: string
+                    created_at?: string
+                }
+            }
+            order_items: {
+                Row: {
+                    id: number
+                    order_id: number
+                    product_id: number | null
+                    quantity: number
+                    price_at_time: number
+                    created_at: string
+                }
+                Insert: {
+                    id?: number
+                    order_id: number
+                    product_id?: number | null
+                    quantity: number
+                    price_at_time: number
+                    created_at?: string
+                }
+                Update: {
+                    id?: number
+                    order_id?: number
+                    product_id?: number | null
+                    quantity?: number
+                    price_at_time?: number
+                    created_at?: string
+                }
+            }
         }
     }
 }

@@ -64,13 +64,13 @@ export default function Navbar() {
                     {/* Icons & Mobile Toggle */}
                     <div className="flex items-center gap-4 z-50">
                         {user ? (
-                            <button
-                                onClick={handleLogout}
-                                className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-600 hover:text-red-500 hidden md:block"
-                                title="Log Out"
+                            <Link
+                                href="/profile"
+                                className="p-2 hover:bg-slate-100 rounded-full transition-colors hidden md:block"
+                                title="My Profile"
                             >
-                                <LogOut className="w-5 h-5" />
-                            </button>
+                                <User className="w-5 h-5" />
+                            </Link>
                         ) : (
                             <Link href="/login" className="p-2 hover:bg-slate-100 rounded-full transition-colors hidden md:block" title="Log In">
                                 <User className="w-5 h-5" />
@@ -93,27 +93,38 @@ export default function Navbar() {
                     </div>
 
                     {/* Mobile Menu Overlay */}
+                    {/* Mobile Menu Overlay */}
                     {isMenuOpen && (
-                        <div className="fixed inset-0 bg-background/95 backdrop-blur-md z-40 flex flex-col items-center justify-center gap-8 md:hidden animate-in fade-in slide-in-from-top-4 duration-300">
-                            <Link href="/shop" onClick={toggleMenu} className="text-2xl font-caveat font-bold hover:text-primary transition-colors">
-                                Shop Collections
-                            </Link>
-                            <Link href="/about" onClick={toggleMenu} className="text-2xl font-caveat font-bold hover:text-primary transition-colors">
-                                Our Story
-                            </Link>
-                            <Link href="/journal" onClick={toggleMenu} className="text-2xl font-caveat font-bold hover:text-primary transition-colors">
-                                Journal
-                            </Link>
-                            <div className="w-16 h-0.5 bg-slate-200 rounded-full"></div>
-                            {user ? (
-                                <button onClick={() => { handleLogout(); toggleMenu(); }} className="flex items-center gap-2 text-red-500 font-bold">
-                                    <LogOut className="w-5 h-5" /> Log Out
+                        <div className="fixed inset-0 bg-white z-[60] flex flex-col animate-in slide-in-from-right duration-300">
+                            <div className="flex justify-end p-6">
+                                <button onClick={toggleMenu} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
+                                    <X className="w-8 h-8 text-slate-800" />
                                 </button>
-                            ) : (
-                                <Link href="/login" onClick={toggleMenu} className="flex items-center gap-2 text-primary font-bold">
-                                    <User className="w-5 h-5" /> Log In
+                            </div>
+                            <div className="flex flex-col items-center justify-center flex-1 gap-8 pb-20">
+                                <Link href="/" onClick={toggleMenu} className="text-4xl font-caveat font-bold text-primary mb-8">
+                                    ELYSIA
                                 </Link>
-                            )}
+                                <Link href="/shop" onClick={toggleMenu} className="text-2xl font-medium tracking-wide hover:text-primary transition-colors">
+                                    Shop
+                                </Link>
+                                <Link href="/about" onClick={toggleMenu} className="text-2xl font-medium tracking-wide hover:text-primary transition-colors">
+                                    About
+                                </Link>
+                                <Link href="/journal" onClick={toggleMenu} className="text-2xl font-medium tracking-wide hover:text-primary transition-colors">
+                                    Journal
+                                </Link>
+                                <div className="w-12 h-1 bg-slate-100 rounded-full my-4"></div>
+                                {user ? (
+                                    <Link href="/profile" onClick={toggleMenu} className="flex items-center gap-3 text-xl font-medium tracking-wide text-primary">
+                                        <User className="w-6 h-6" /> My Profile
+                                    </Link>
+                                ) : (
+                                    <Link href="/login" onClick={toggleMenu} className="flex items-center gap-3 text-xl font-medium tracking-wide">
+                                        <User className="w-6 h-6" /> Log In
+                                    </Link>
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>

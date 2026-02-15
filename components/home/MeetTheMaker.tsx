@@ -17,7 +17,7 @@ export default function MeetTheMaker() {
                         </div>
 
                         <h3 className="text-3xl font-bold mb-4 font-caveat">
-                            Hi, I'm Maya.
+                            Hi, I'm Sneha Lal.
                         </h3>
                         <p className="text-muted-foreground leading-relaxed mb-4">
                             Everything you see here started as a random doodle in my morning coffee sketchbook.
@@ -31,7 +31,7 @@ export default function MeetTheMaker() {
                             <div className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden border border-sketch-outline">
                                 {/* Small avatar placeholder */}
                             </div>
-                            <span className="font-caveat text-lg text-primary">Maya S.</span>
+                            <span className="font-caveat text-lg text-primary">Sneha Lal.</span>
                         </div>
                     </div>
 

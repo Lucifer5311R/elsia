@@ -29,7 +29,13 @@ export default function MeetTheMaker() {
 
                         <div className="mt-6 flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden border border-sketch-outline">
-                                {/* Small avatar placeholder */}
+                                <Image
+                                    src="/hero-poster.jpg"
+                                    alt="Sneha Lal"
+                                    width={40}
+                                    height={40}
+                                    className="w-full h-full object-cover"
+                                />
                             </div>
                             <span className="font-caveat text-lg text-primary">Sneha Lal.</span>
                         </div>
@@ -39,9 +45,13 @@ export default function MeetTheMaker() {
                         <div className="relative w-80 h-80 md:w-96 md:h-96">
                             {/* Image Mask / Shape */}
                             <div className="absolute inset-0 bg-slate-200 rounded-full border-4 border-white shadow-[0px_0px_0px_2px_rgba(26,26,26,1)] overflow-hidden">
-                                <div className="w-full h-full bg-gray-300 flex items-center justify-center text-muted-foreground">
-                                    <span className="font-caveat text-2xl">Maker Portrait</span>
-                                </div>
+                                <Image
+                                    src="/hero-poster.jpg"
+                                    alt="Sneha Lal - Maker of Elysia"
+                                    fill
+                                    className="object-cover"
+                                    priority
+                                />
                             </div>
 
                             {/* Sticker/Tape Element */}

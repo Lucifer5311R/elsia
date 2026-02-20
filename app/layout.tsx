@@ -18,8 +18,11 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "Elsia | Handmade Gifts",
+  title: "Elysia | Handmade Gifts",
   description: "Handmade scrunchies, polaroids & custom hampers",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

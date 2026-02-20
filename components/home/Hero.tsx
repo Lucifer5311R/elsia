@@ -84,7 +84,7 @@ export default function Hero() {
                                     </div>
                                 </div>
                                 <div className="absolute bottom-4 right-4 bg-white px-3 py-1 text-xs font-bold border border-sketch-outline shadow-[2px_2px_0px_black]">
-                                    Watch creation process ▼
+                                    with love ♥
                                 </div>
                             </div>
                         </div>

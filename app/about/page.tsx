@@ -1,5 +1,6 @@
 import Container from "@/components/Container";
 import { Heart, Sparkles, PenTool } from "lucide-react";
+import Image from "next/image";
 
 export default function AboutPage() {
     return (
@@ -51,11 +52,16 @@ export default function AboutPage() {
                         </div>
                     </div>
 
-                    {/* Founder Section (Placeholder) */}
+                    {/* Founder Section */}
                     <div className="bg-slate-50 p-8 rounded-2xl border-2 border-dashed border-slate-200 text-center">
                         <h2 className="text-3xl font-caveat font-bold mb-6">Meet the Maker</h2>
-                        <div className="w-32 h-32 bg-slate-200 rounded-full mx-auto mb-6 flex items-center justify-center text-slate-400">
-                            Photo
+                        <div className="w-32 h-32 rounded-full mx-auto mb-6 overflow-hidden relative">
+                            <Image
+                                src="/maker-portrait.jpg"
+                                alt="Sneha Lal - Maker of Elysia"
+                                fill
+                                className="object-cover"
+                            />
                         </div>
                         <p className="text-slate-600 italic">
                             "I started Elysia to bring a little more color and joy into everyday moments. Thank you for supporting my small business!"

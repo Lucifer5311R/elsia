@@ -63,7 +63,7 @@ export default function Hero() {
                                         muted
                                         loop
                                         playsInline
-                                        poster="/hero-poster.jpg"
+                                        poster="/maker-portrait.jpg"
                                     >
                                         <source src="/hero-video.mp4" type="video/mp4" />
                                         Your browser does not support the video tag.

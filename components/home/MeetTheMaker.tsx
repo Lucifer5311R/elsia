@@ -30,7 +30,7 @@ export default function MeetTheMaker() {
                         <div className="mt-6 flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden border border-sketch-outline">
                                 <Image
-                                    src="/hero-poster.jpg"
+                                    src="/maker-portrait.jpg"
                                     alt="Sneha Lal"
                                     width={40}
                                     height={40}
@@ -46,7 +46,7 @@ export default function MeetTheMaker() {
                             {/* Image Mask / Shape */}
                             <div className="absolute inset-0 bg-slate-200 rounded-full border-4 border-white shadow-[0px_0px_0px_2px_rgba(26,26,26,1)] overflow-hidden">
                                 <Image
-                                    src="/hero-poster.jpg"
+                                    src="/maker-portrait.jpg"
                                     alt="Sneha Lal - Maker of Elysia"
                                     fill
                                     className="object-cover"
